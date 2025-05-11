@@ -22,15 +22,19 @@ Berdasarkan data dan hasil studi tersebut, penelitian klasifikasi sampah berbasi
 Untuk memastikan arah dan ruang lingkup proyek klasifikasi sampah berbasis _Machine Learning_ terdefinisi dengan jelas, berikut disajikan bagian Business Understanding sebagai landasan perencanaan dan evaluasi solusi :
 
 1.  Problem Statements
-  - Pemilahan sampah masih banyak dilakukan secara manual di tingkat rumah tangga maupun di fasilitas TPA, sehingga memakan waktu lama, biaya operasional tinggi, dan rentan kesalahan manusia
-
-  - Volume sampah yang terus bertambah tanpa disertai sistem sortir yang efektif menyebabkan TPA cepat penuh, memperpendek umur layanan, dan menimbulkan masalah lingkungan.
+  - Bagaimana mengklasifikasikan jenis sampah dari gambar secara otomatis dan akurat
+  - Algoritma deep learning apa yang memberikan hasil terbaik untuk klasifikasi gambar sampah pada dataset yang tersedia
 
 2.  Goals
-   - Menciptakan bangun sistem yang secara otomatis mengidentifikasi dan memisahkan sampah ke dalam kategori utama
-   - Mencapai tingkat klasifikasi minimal 90%, sehingga kesalahan sortir turun dibawah 5%
+   - Membangun sistem klasifikasi gambar sampah yang akurat dan efisien menggunakan deep learning
+   - Membandingkan dua model deep learning populer dalam tugas klasifikasi gambar : EfficientNetB2 dan InceptionV3
 
-/3.  Solution Statements
+3.  Solution Statements
+Untuk mencapai tujuan tersebut, proyek ini akan mengimplementasikan dan membandingkan dua pendekatan :
+-  EfficientNetB2 : Digunakan sebagai baseline model, EfficientNetB2 memiliki keunggulan dalam efisiensi komputasi dan akurasi pada klasifikasi gambar. Model ini akan digunakan dengan transfer learning dan ditambahkan beberapa layer dense dan dropout sebagai bentuk regulasi.
+-  InceptionV3 : Sebagai model pembanding, InceptionV3 adalah arsitektur convolutional neural network yang dikenal dengan kemampuannya menangani kompleksitas visual yang tinggi melalui penggunaan modul inception. InceptionV3 juga akan diterapkan melalui transfer learning dengan struktur top model yang sebanding.
+
+Kedua model akan dievaluasi dengan metrik **akurasi**, **loss**, dan metrik lain seperti **precision**, **recall**, serta **F1-score**. Perbandingan ini bertujuan untuk menentukan model mana yang lebih unggul dalam tugas klasifikasi gambar sampah ini.
 
 # Data Understanding
 <a href="https://www.kaggle.com/datasets/kaptenyasa/dataset-sampah">Dataset </a> yang digunakan dalam proyek ini merupakan kumpulan citra sampah yang berasal dari laman <a href="https://www.kaggle.com/"> Kaggle </a> yang telah terbagi ke dalam beberapa kategori. Dataset ini bisa diakses dengan tautan sebagai berikut: https://www.kaggle.com/datasets/kaptenyasa/dataset-sampah
@@ -57,3 +61,44 @@ Pada tahap ini, dilakukan serangkaian proses untuk mempersiapkan data gambar sam
 5.  Splitting Data : Dataset dibagi menjadi tiga subset utama : Data pelatihan, data validasi, dan data testing. Proporsi pemisahan dilakukan sekitar 60:20:20. Hal ini bertujuan agar performa model dapat dievaluasi terhadap data yang belum pernah dilihat selama pelatihan, sehingga memberikan gambaran performa generalisasi model.
 
 ## Modelling
+Dalam proyek ini digunakan dua arsitektur deep learning berbasis _Convolutional Neural Network (CNN)_, yaitu **EfficientNetB2** dan **InceptionV3**, keduanya dengan pendekatan transfer learning.
+
+1.  EfficientNetB2
+   -  Pretrained weights : ImageNet
+   -  Layer Tambahan :
+       -  GlobalAveragePooling2D
+       -  Dropout (0.4, 0.3, 0.2)
+       -  Dense (256 dan 128 unit, ReLU)
+       -  Output : Dense dengan jumlah neuron sesuai jumlah kelas dan aktivasi softmax
+  -  Optimizer : Adam
+  -  Loss : Categorical Crossentropy
+  -  Callback : EarlyStopping dan ModelCheckpoint
+2.  InceptionV3
+-  Pretrained weights : ImageNet
+-  Include top : False
+-  Input shape 224x224x3
+-  Layer tambahan (sama dengan EfficientNetB2)
+-  Optimizer : Adam
+-  Loss : Categorical Crossentropy
+-  Callback : EarlyStopping dan ModelCheckpoint
+
+Masing-masing algoritma memilki kekurangan dan kelebihannya, yaitu :
+1.  EfficientNetB2
+   -  Kelebihan :
+       -  Efisien secara komputasi dan memori
+       -  Arsitektur yang ringan tetapi tetap mampu memberikan akurasi tinggi
+       -  Cocok untuk pengujian cepat dan deployment
+  -  Kekurangan :
+      -  Bisa kurang akurat untuk dataset dengan kompleksitas tinggi jika tidak dilakukan fine-tuning secara mendalam
+   
+2.  InceptionV3
+   -  Kelebihan :
+       -  Mampu menangkap pola visual kompleks melalui struktur inception module
+       -  Lebih mendalam dan lebih kuat dari banyak model CNN standar
+    
+  - Kekurangan :
+      -  Lebih berat secara komputasi
+      -  Cenderung membutuhkan lebih banyak data dan waktu pelatihan
+   
+## Evaluation
+Dalam proyek klasifikasi gambar sampah ini, model dievaluasi menggunakan beberapa metrik yaitu **akurasi**, **precision**, **recall**, dan **F1-Score**. **Akurasi** digunakan untuk melihat seberapa banyak prediksi model yang benar yang benar dibandingkan dari seluruh data. **Precision** menunjukkan seberapa tepat model dalam memprediksi satu kelas tertentu, sedangkan **Recall** mengukur seberapa baik model dalam menemukan semua data dari kelas tersebut. **F1-Score** digunakan untuk menyeimbangkan precision dan recall agar hasil lebih adil. Metrik-metrik ini dipilih karena sesuai untuk tugas klasifikasi dengan banyak kelas, dan penting untuk mengetahui kinerja model tidak hanya keseluruhan, tetapi juga pada masing-masing kelas.
