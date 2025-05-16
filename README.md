@@ -1,43 +1,30 @@
 # Laporan Proyek Machine Learning - Muhammad Daffa Nurahman
 
 ## Domain Proyek
-  Menurut data Kementerian Lingkungan Hidup dan Kehutanan Republik Indonesia, timbulan sampah domestik nasional mencapai sekitar 67,8 juta ton per tahun, tetapi hanya sekitar 11 % yang terkelola melalui daur ulang formal. Banyak Tempat Pembuangan Akhir (TPA) di kabupaten/kota beroperasi di atas 80 % kapasitas desain, menimbulkan risiko pencemaran dan masalah kesehatan masyarakat [1].
+Industri otomotif saat ini terus berkembang dengan cepat, sehingga banyak pilihan kendaraan yang berbeda-beda dari segi harga, kapasitas, dan fitur keamanan. Hal ini membuat konsumen dan produsen perlu cara yang cepat dan tepat untuk menilai kualitas atau kelayakan kendaraan. Penilaian secara manual memakan waktu dan bisa bersifat subjektif. Oleh karena itu, diperlukan solusi otomatis menggunakan machine learning yang dapat mengklasifikasikan kendaraan berdasarkan spesifikasi teknisnya.
 
-  Penelitian Putra et al. menunjukkan bahwa pemilahan manual sampah di tingkat rumah tangga di Jakarta memiliki tingkat kesalahan hingga 25 %, yang mengurangi efisiensi daur ulang dan meningkatkan kontaminasi limbah organik serta anorganik [2]. Hal ini menegaskan perlunya sistem klasifikasi otomatis berbasis machine learning untuk meningkatkan akurasi dan kecepatan sortir.
-
-  Beberapa studi di Indonesia telah mengembangkan solusi ML/CV untuk klasifikasi sampah:
-  
-- Kadyanan et al. mengimplementasikan Convolutional Neural Network (CNN) untuk klasifikasi sampah padat—termasuk organik, plastik, kertas, dan logam—pada sampel lapangan di Bali, mencapai akurasi hingga 95,2 % tanpa memerlukan lisensi berbayar [3].
-
-- Sari dan Prasetyo memanfaatkan MobileNetV2 dalam aplikasi mobile untuk membedakan sampah organik dan anorganik di Yogyakarta, dengan akurasi 90,2 % dan waktu inference rata rata 120 ms per citra [4].
-
-- Tim Telkom University mengimplementasikan YOLOv5 pada CCTV untuk deteksi sampah plastik di daerah aliran sungai, memperoleh akurasi hingga 84 % dalam kondisi real time [5].
-
-Berdasarkan data dan hasil studi tersebut, penelitian klasifikasi sampah berbasis machine learning di Indonesia penting untuk:
-1.	Mengotomasi proses sortir dengan akurasi tinggi dan waktu inferensi rendah.
-2.	Meningkatkan tingkat daur ulang nasional melalui pemilahan yang lebih akurat.
-3.	Mengurangi beban operasional TPA dan dampak negatif lingkungan.
+Dataset Car Evaluation yang dibuat oleh Bohanec dan Rajkovic (1998) banyak digunakan dalam penelitian klasifikasi kendaraan. Dataset ini memuat fitur-fitur seperti harga beli, biaya perawatan, jumlah pintu, kapasitas penumpang, ukuran bagasi, dan tingkat keamanan, yang kemudian diklasifikasikan menjadi kategori kelayakan kendaraan : **unacc**, **acc**, **good**, dan **vgood**. Dengan menggunakan algoritma klasifikasi, model machine learning dapat membantu memprediksi kategori kendaraan secara cepat dan akurat, yang bermanfaat bagi konsumen dan pelaku industri otomotif.
 
 ## Business Understanding
-Klasifikasi sampah merupakan salah satu langkah penting dalam mendukung pengelolaan lingkungan yang berkelanjutan. Pemisahan manual membutuhkan waktu dan sumber daya manusia yang tidak sedikit, serta rentan terhadap kesalahan klasifikasi. Oleh karena itu, penerapan teknologi berbasis _Image classification_ melalui deep learning menjadi solusi yang menjanjikan dalam proses otomatisasi pemilahan sampah.
+Dalam dunia otomotif, konsumen dan produsen harus bisa menilai apakah suatu kendaraan layak digunakan atau tidak, berdasarkan parameter seperti harga, kapasitas, dan keamanan. Namun, proses evaluasi manual membutuhkan waktu dan bisa bersifat subjektif karena tergantung pada opini masing-masing individu.
 
 1.  Problem Statements
 Berikut adalah permasalahan utama yang ingin diselesaikan pada proyek ini : 
-- Pemilahan sampah secara manual tidak efisien dan memakan banyak waktu
-- Gambar sampah memiliki latar belakang dan bentuk yang bervariasi, sehingga sulit untuk diklasifikasikan secara akurat oleh sistem otomatis tanpa pendekatan yang akurat
-- Keterbatasan sumber daya untuk membangun sistem klasifikasi dari nol mengharuskan penggunaan pendekatan berbasis transfer learning
+  -  Bagaimana cara mengklasifikasikan kendaraan ke dalam kelayakan (unacceptable, acceptable, good, very good) secara otomatis dan akurat
+  -  Bagaimana membangun model klasifikasi yang mampu bekerja dengan fitur **kategorikal**, serta bisa diinterpretasikan dan ditingkatkan performanya
 
 2.  Goals
    Adapun tujuan utama dari proyek ini adalah :
--  Meningkatkan efisiensi dan akurasi dalam proses pemilahan sampah
--  Menerapkan pendekatan _transfer learning_ agar model dapat dibangun secara optimal meski dengan data terbatas
+  -  Mengembangkan model machine learning untuk **mengklasifikasikan kelayakan kendaraan** berdasarkan fitur spesifikasi seperti harga, jumlah, pintu, dan tingkat keamanan.
+  -  Membandingkan beberapa model klasifikasi untuk **menemukan model terbaik** dengan akurasi tinggi dan kesalahan klasifikasi yang rendah.
+  -  Menggunakan metrik evaluasi seperti **akurasi**, **confusion matrix**, dan **F1-Score** untuk mengukur performa model secara objektif.
 
 3.  Solution Statement
-   Solusi yang diterapkan dalam proyek ini guna mencapai tujuan yang telah ditentukan adalah :
--  Penerapan Transfer Learning dengan EfficientNetB3 : menggunakan arsitektur EfficientNetB3 yang telah terbukti efisien dalam hal akurasi dan ukuran model. Serta memanfaatkan bobot pralatih (pretrained weights) dari ImageNet untuk mempercepat pelatihan dan meningkatkan hasil prediksi.
--  Peningkatan performa melalui Hyperparameter tuning : Dengan menyesuaikan parameter penting seperti _learning rate_, jumlah unit dense layer, dropout, dan batch size. Serta, menemukan konfigurasi optimal agar model tidak mengalami overfitting dan dapat bekerja dengan baik pada data yang belum pernah dilihat
+   Untuk mencapai tujuan klasifikasi kelayakan kendaraan secara otomatis, proyek ini mengusulkan beberapa pendekatan berbasis machine learning :
+  -  **Decision Tree Classifier** sebagai baseline : Algoritma ini dipilih karena sifatnya yang mudah dipahami, cepat dan sangat cocok untuk data dengan fitur kategorikal seperti pada dataset kendaraan ini. Decision Tree juga memberikan struktur aturan yang jelas dalam pengambilan keputusan, sehingga sangat bermanfaat untuk interpretasi awal terhadap data.
+  -  **Random Forest Classifier** sebagai pembanding : Model ini merupakan pengembangan dari decision tree yang terdiri dari kumpulan pohon keputusan (ensemble), sehingga dapat meningkatkan akurasi sekaligsu mengurangi resiko overfitting. Random Forest dinilai mampu memberikan performa yang lebih stabil dan akuran pada data tabular seperti dataset yang digunakan dalam proyek ini.
 
-Solusi ini akan dievaluasi menggunakan metrik **akurasi** dan **loss** sebagai acuan dalam mengukur keberhasilan model dalam mengklasifikasikan gambar sampah secara otomatis dan akurat.
+Kinerja semua model akan diukur menggunakan beberapa metrik evaluasi, yaitu **akurasi** untuk mengetahui proporsi prediksi yang benar secara keseluruhan, **confusion matrix** untuk melihat distribusi kesalahan antar kelas, serta **F1-Score** untuk menangani kemunkinan ketidakseimbangan antar kategori kelayakan kendaraan. Dengan pendekatan ini, diharapkan dapat diperoleh model klasifikasi kendaraan yang tidak hanya akurat, tetapi juga efisien dan dapat digunakan untuk mendukung pengambilan keputusan secara otomatis.
 
 # Data Understanding
 <a href="https://www.kaggle.com/datasets/kaptenyasa/dataset-sampah">Dataset </a> yang digunakan dalam proyek ini merupakan kumpulan citra sampah yang berasal dari laman <a href="https://www.kaggle.com/"> Kaggle </a> yang telah terbagi ke dalam beberapa kategori. Dataset ini bisa diakses dengan tautan sebagai berikut: https://www.kaggle.com/datasets/kaptenyasa/dataset-sampah
