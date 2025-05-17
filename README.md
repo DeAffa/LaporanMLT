@@ -61,32 +61,47 @@ Dalam tahap ini, beberapa teknik data preparation diterapkan untuk menyiapkan da
 3.  **SMOTE Oversampling** : Distribusi kelas target `class` diketahui tidak seimbang, dengan kelas `unacc` yang jauh lebih dominan dibanding `good` dan `vgood`. Untuk mengatasi hal ini, diterapkan teknik **SMOTE (Synthetic Minority Oversampling Technique** dari library `imblearn`. SMOTE hanya diterapkan pada **data latih**, untuk menghindari kebocoran data uji. Hasilnya, jumlah data di setiap kelas menjadi seimbang.
 
 ## Modelling
-Proses pemodelan dilakukan melalui beberapa langkah sebagai berikut : 
-1.  Pre-trained Model : Menggunakan **EfficientNetB3** dengan bobot pralatih dari ImageNet dan tanpa bagian fully connected layer pada bagian atas (top layer).
-2.  Layer tambahan : Ditambahkan beberapa layer seperti GlobalAveragePooling2D, beberapa Dense layer, dan dropout untuk mengurangi overfitting
-3.  Loss Function : **categorical_crossentropy** karena data diklasifikasikan dalam beberapa kelas.
-4.  Optimizer : **Adam**, dengan learning rate yang disesuaikan melalui tuning
-5.  Metrics : Akurasi digunakan sebagai metrik utama untuk evaluasi performa
+Pada tahap ini, dua model machine learning digunakan untuk menyelesaikan permasalahan klasifikasi jenis kendaraan berdasarkan fitur spesifikasinya : 
 
-Kelebihan dan kekurangan EfficientNetB3
--  Kelebihan :
-    -  Efisien secara komputasi : lebih kecil dan lebih cepat dibanding banyak model lain dengan akurasi setara
-    -  Performa tinggi pada berbagai tugas klasifikasi gambar, termasuk dataset yang kompleks
-    -  Mudah diadaptasi melalui _fine-tuning_ dan kompatibel dengan _transfer learning_
--  Kekurangan :
-    -  Memerlukan input gambar dengan resolusi tertentu (ukuran input lebih besar dari model ringan)
-    -  Latensi bisa meningkat pada perangkat keras dengan memori rendah karena ukuran model menengah
-    -  Tidak selalu optimal tanpa penyesuaian hyperparameter untuk kasus spesifik  
+1.  **Decision Tree Classifier**
+2.  **Random Forest Classifier**
+
+Kedua model dipilih karena : 
+-  Mampu menangani data kategorikal (setelah encoding)
+-  Interpretatif dan cocok untuk data dengan fitur non-numerik
+-  Tidak membutuhkan normalisasi atau scaling data
+
+Proses pemodelan dilakukan sebagai berikut : 
+-  Melatih model pada data latih hasil SMOTE (`X-train_bal`, `y_train_bal`)
+-  Menguji performa model menggunakan data uji (`Xtest`, `y_test`)
+-  Mengevaluasi performa menggunakan metrik **akurasi**, **precision**, **recall**, dan **F1-Score**
+
+Berikut adalah parameter awal yang digunakan :
+-  Decision Tree : `criterion='gini'`, `max_depth=None`, `random_state=42`
+-  Random Forest : `n_estimators=100`, `max_depth=None`, `random_state=42`
+
+Kelebihan dan Kekurangan dari masing-masing model :
+| Model             | Kelebihan                                                                                      | Kekurangan                                                                           |
+|-------------------|------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
+| **Decision Tree** | Mudah dipahami dan divisualisasikan. Cepat untuk pelatihan dan prediksi.                      | Mudah overfitting jika tidak dibatasi kedalamannya.                                 |
+| **Random Forest** | Lebih akurat, mengurangi overfitting dengan rata-rata banyak pohon. Cocok untuk data kategori. | Lebih kompleks dan membutuhkan lebih banyak sumber daya. Sulit untuk diinterpretasi. |
+
+Setelah dilakukan pelatihan dan evaluasi pada kedua model, didapatkan bahwa :
+-  **Random Forest Classifier** memberikan performa yang lebih tinggi pada hampir semua metrik evaluasi dibandingkan Decision Tree
+-  Model ini lebih stabil terhadap variasi data dan mengurangi resiko overfitting karena menggunakan ensemble beberapa pohon keputusan
    
 ## Evaluation
-Pada tahap evaluai, dilakukan pengukuran kinerja model menggunakan metrik yang sesuai dengan konteks klasifikasi multi-kelas untuk gambar sampah. Untuk mengevaluasi kinerja model, digunakan dua metrik utama, yaitu :
-1.  Accuracy (akurasi)
-   Akurasi merupakan metrik yang digunakan untuk mengukur seberapa banyak prediksi model yang benar dibandingkan dengan seluruh prediksi yang dilakukan.
-2.  Loss (Categorical Crossentropy Loss)
-   Loss function yang digunakan adalah _categorical crossentropy_, yang mengukur seberapa jauh prediksi model dari nilai sebenarnya dalam bentuk probabilitas.
+Pada tahap evaluasi ini, digunakan beberapa metrik yang umum digunakan dalam permasalahan klasifikasi multikelas, yaitu **accuracy**, **precision**, **recall**, dan **F1-Score**. Metrik **accuracy** mengukur seberapa banyak prediksi yang benar dari seluruh data uji. Namun, karena klasifikasi ini melibatkan banyak kelas, maka penting juga untuk melihat **precision**, yaitu seberapa tepat model dalam memprediksi suatu kelas, dan **recall** yaitu seberapa baik model dalam mengenali semua data yang benar-benar termasuk dalam kelas tersebut.
+Kedua metrik tersebut dilengkapi dengan **F1-Score**, yang merupakan rata-rata harmonis dari precision dan recall, serta sangat bermanfaat ketika terdapat kemungkinan ketidakseimbangan antarkelas.
 
-Berdasarkan pelatihan dan validasi model menggunakan _EfficientNetB3_, model menunjukkan performa sebagai berikut : 
--  **Akurasi pada data validasi** mencapai sekitar **0.9014** atau setara dengan **90%**
--  **Loss pada data validasi** menunjukkan nilai yang relatif rendah, yaitu sebesar **0.3180** atau setara dengan **30%**
+Hasil Evaluasi menunjukkan bahwa model **Random Forest** memiliki kinerja yang lebih baik dibandingkan **Decision Tree** pada semua metrik yang digunakan. Model Decision Tree memiliki tingkat akurasi sekitar 92%, dengan precision, recall, dan F2-Score rata-rata pada kisaran 90 hingga 92% untuk setiap kelas. Sementara itu, Random Forest mencatatkan akurasi sekitar 96%, dengan precision, recal, dan F1-Score di kisaran 95 hingga 97%. Dengan performa yang lebih stabil dan akurat, Random Forest dipilih sebagai model terbaik dalam proyek ini.
 
-Penggunaan metrik akurasi dan loss telah memberikan gambaran yang cukup jelas terhadap performa model dalam mengklasifikasikan gambar sampah. Akurasi yang cukup tinggi menunjukkan bahwa model mampu mengenali pola dengan baik, sementara nilai loss yang rendah menandakan bahwa prediksi model cenderung dekat dengan label sebenarnya.
+Berikut adalah ringkasan metrik masing-masing model : 
+| Metrik    | Decision Tree | Random Forest |
+|----------|----------------|----------------|
+| Accuracy  | ~92%           | **~96%**        |
+| Precision | 91%–93%        | **95%–97%**     |
+| Recall    | 90%–92%        | **95%–97%**     |
+| F1-Score  | 90%–92%        | **95%–97%**     |
+
+Pemilihan model didasarkan pada hasil evaluasi ini, yang menunjukkan bahwa **Random Forest** lebih efektif dalam menyelesaikan tugas klasifikasi jenis kendaraan dengan fitur-fitur kategorikal.
