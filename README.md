@@ -9,35 +9,29 @@ Dataset Car Evaluation yang dibuat oleh Bohanec dan Rajkovic (1998) banyak digun
 Dalam dunia otomotif, konsumen dan produsen harus bisa menilai apakah suatu kendaraan layak digunakan atau tidak, berdasarkan parameter seperti harga, kapasitas, dan keamanan. Namun, proses evaluasi manual membutuhkan waktu dan bisa bersifat subjektif karena tergantung pada opini masing-masing individu.
 
 1.  Problem Statements
+
 Berikut adalah permasalahan utama yang ingin diselesaikan pada proyek ini : 
   -  Bagaimana cara mengklasifikasikan kendaraan ke dalam kelayakan (unacceptable, acceptable, good, very good) secara otomatis dan akurat
   -  Bagaimana membangun model klasifikasi yang mampu bekerja dengan fitur **kategorikal**, serta bisa diinterpretasikan dan ditingkatkan performanya
 
 2.  Goals
-   Adapun tujuan utama dari proyek ini adalah :
+
+Adapun tujuan utama dari proyek ini adalah :
   -  Mengembangkan model machine learning untuk **mengklasifikasikan kelayakan kendaraan** berdasarkan fitur spesifikasi seperti harga, jumlah, pintu, dan tingkat keamanan.
   -  Membandingkan beberapa model klasifikasi untuk **menemukan model terbaik** dengan akurasi tinggi dan kesalahan klasifikasi yang rendah.
   -  Menggunakan metrik evaluasi seperti **akurasi**, **confusion matrix**, dan **F1-Score** untuk mengukur performa model secara objektif.
-
 3.  Solution Statement
-   Untuk mencapai tujuan klasifikasi kelayakan kendaraan secara otomatis, proyek ini mengusulkan beberapa pendekatan berbasis machine learning :
+
+Untuk mencapai tujuan klasifikasi kelayakan kendaraan secara otomatis, proyek ini mengusulkan beberapa pendekatan berbasis machine learning :
   -  **Decision Tree Classifier** sebagai baseline : Algoritma ini dipilih karena sifatnya yang mudah dipahami, cepat dan sangat cocok untuk data dengan fitur kategorikal seperti pada dataset kendaraan ini. Decision Tree juga memberikan struktur aturan yang jelas dalam pengambilan keputusan, sehingga sangat bermanfaat untuk interpretasi awal terhadap data.
   -  **Random Forest Classifier** sebagai pembanding : Model ini merupakan pengembangan dari decision tree yang terdiri dari kumpulan pohon keputusan (ensemble), sehingga dapat meningkatkan akurasi sekaligsu mengurangi resiko overfitting. Random Forest dinilai mampu memberikan performa yang lebih stabil dan akuran pada data tabular seperti dataset yang digunakan dalam proyek ini.
 
 Kinerja semua model akan diukur menggunakan beberapa metrik evaluasi, yaitu **akurasi** untuk mengetahui proporsi prediksi yang benar secara keseluruhan, **confusion matrix** untuk melihat distribusi kesalahan antar kelas, serta **F1-Score** untuk menangani kemunkinan ketidakseimbangan antar kategori kelayakan kendaraan. Dengan pendekatan ini, diharapkan dapat diperoleh model klasifikasi kendaraan yang tidak hanya akurat, tetapi juga efisien dan dapat digunakan untuk mendukung pengambilan keputusan secara otomatis.
 
 # Data Understanding
-<a href="https://www.kaggle.com/datasets/kaptenyasa/dataset-sampah">Dataset </a> yang digunakan dalam proyek ini merupakan kumpulan citra sampah yang berasal dari laman <a href="https://www.kaggle.com/"> Kaggle </a> yang telah terbagi ke dalam beberapa kategori. Dataset ini bisa diakses dengan tautan sebagai berikut: https://www.kaggle.com/datasets/kaptenyasa/dataset-sampah
+Proyek ini menggunakan dataset bernama <a href="https://archive.ics.uci.edu/dataset/19/car+evaluation"> Car Evaluation Dataset </a> yang berasal dari laman <a href="https://archive.ics.uci.edu/"> UCI Machine Learning Repository </a> yang telah terbagi ke dalam beberapa kategori. Dataset ini bisa diakses dengan tautan sebagai berikut: https://archive.ics.uci.edu/dataset/19/car+evaluation
 
-Berdasarkan dataset tersebut, kita bisa melihat bahwa data citra yang ada pada dataset tersebut berjumlah 7000 gambar dengan rincian sebagai berikut :
-
-- Organic : 1000 gambar
-- Kertas : 1000 gambar
-- Plastik : 1000 gambar
-- Botol plastik : 1000 gambar
-- Kardus : 1000 gambar
-- Kaca : 1000 gambar
-- Metal 1000 gambar
+Dataset ini terdiri dari **1.728 baris data** dan **6 fitur** (atribut) input serta **1 label** (kelas) output. Semua fitur pada dataset ini bersifat **kategorikal**, dan tidak terdapat nilai kosong atau duplikat, sehingga data berada dalam kondisi bersih dan siap digunakan untuk analisis dan pelatihan model.
 
 Berdasarkan eksplorasi awal terhadap dataset citra sampah, dilakukan pengambilan beberapa sampel visualisasi acak untuk data yang tersedia. Gambar-gambar yang ditampilkan dengan rasionya memberikan gambaran visual mengenai karakteristik dari data citra yang ada. Rasio gambar secara umum menunjukkan konsistensi proporsional, sehingga proses_Resize_ atau normalisasi ukuran pada tahap _preprocessing_ selanjutnya dapat dilakukan dengan efisien tanpa mengorbankan informasi penting dari gambar.
 
