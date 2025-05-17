@@ -33,16 +33,32 @@ Proyek ini menggunakan dataset bernama <a href="https://archive.ics.uci.edu/data
 
 Dataset ini terdiri dari **1.728 baris data** dan **6 fitur** (atribut) input serta **1 label** (kelas) output. Semua fitur pada dataset ini bersifat **kategorikal**, dan tidak terdapat nilai kosong atau duplikat, sehingga data berada dalam kondisi bersih dan siap digunakan untuk analisis dan pelatihan model.
 
-Berdasarkan eksplorasi awal terhadap dataset citra sampah, dilakukan pengambilan beberapa sampel visualisasi acak untuk data yang tersedia. Gambar-gambar yang ditampilkan dengan rasionya memberikan gambaran visual mengenai karakteristik dari data citra yang ada. Rasio gambar secara umum menunjukkan konsistensi proporsional, sehingga proses_Resize_ atau normalisasi ukuran pada tahap _preprocessing_ selanjutnya dapat dilakukan dengan efisien tanpa mengorbankan informasi penting dari gambar.
+📊 Deskripsi Variabel (Fitur)
+
+Berikut adalah uraian dari seluruh fitur pada dataset : 
+
+|     Fitur     | Deskripsi                                                                 | Dtype  |
+|:-------------:|:--------------------------------------------------------------------------:|:------:|
+| `buying`      | Harga beli mobil (kategori: vhigh, high, med, low)                        | object |
+| `maint`       | Biaya perawatan mobil (kategori: vhigh, high, med, low)                   | object |
+| `doors`       | Jumlah pintu (kategori: 2, 3, 4, more)                                     | object |
+| `persons`     | Kapasitas penumpang (kategori: 2, 4, more)                                 | object |
+| `lug_boot`    | Ukuran bagasi (kategori: small, med, big)                                 | object |
+| `safety`      | Tingkat keselamatan (kategori: low, med, high)                            | object |
+| `class`       | Kategori evaluasi kendaraan (target: unacc, acc, good, vgood)             | object |
+
+Beberapa langkah eksplorasi dilakukan untuk memahami data, antara lain : 
+-  **Distribusi label target** (`class`) menunjukkan ketidak seimbangan. Kelas `unacc` mendominasi, sedangkan `vgood` dan `good` memiliki jumlah yang jauh lebih sedikit
+-  **Visualisasi tiap fitur** seperti `buying`, `maint`, dan `safety` menunjukkan bahwa data terdistribusi cukup merata pada masing-masing nilai kategorikal.
+-  **Crosstab antara fitur dan label** seperti `safety` dengan `class` menunjukkan bahwa kendaraan dengan tingkat keselamatan tinggi cenderung mendapatkan evaluasi lebih baik (`vgood` atau `good`)
+
+Visualisasi menggunakan grafik batan juga menunjukkan adanya hubungan yang dapat dimanfaatkan oleh model, terutama pada fitur `safety`, `persons`, dan `buying`, yang tampak memiliki pengaruh terhadap label akhir.
 
 ## Data Preparation
-Pada tahap ini, dilakukan serangkaian proses untuk mempersiapkan data gambar sampah agar siap digunakan dalam proses pelatihan model klasifikasi berbasis deep learning. Proses data preparation dilakukan secara berurutan sebagai berikut :
-
-1.  Memuat dan Mengorganisasi Dataset : Dataset yang digunakan merupakan kumpulan gambar sampah yang sudah dikategorikan ke dalam folder berdasarkan kelasnya.
-2.  Resize Gambar : Ukuran asli gambar pada dataset tidak seragam. Oleh karena itu, seluruh gambar diubah ukurannya secara konsisten menjadi 224x224 piksel, agar sesuai dengan arsitektur input model _EfficientNetB1_ yang akan digunakan nantinya. Ini juga memastikan bahwa dimensi input antar gambar seragam selama proses pelatihan
-3.  Rescaling (Normalisasi nilai piksel) : Seluruh gambar dinormalisasi dengan cara mengubah nilai piksel dari rentang 0-255 menjadi 0-1. Langkah ini penting untuk mempercepat proses pelatihan model dan mencegah dominasi nilai besar dalam proses komputasi jaringan saraf
-4.  Augmentasi Data : Teknik augmentasi gambar diterapkan untuk memperkaya variasi data pelatihan dan mengurangi resiko overfitting./
-5.  Splitting Data : Dataset dibagi menjadi tiga subset utama : Data pelatihan, data validasi, dan data testing. Proporsi pemisahan dilakukan sekitar 60:20:20. Hal ini bertujuan agar performa model dapat dievaluasi terhadap data yang belum pernah dilihat selama pelatihan, sehingga memberikan gambaran performa generalisasi model.
+Dalam tahap ini, beberapa teknik data preparation diterapkan untuk menyiapkan data sebelum digunakan dalam pelatihan model machine learning. Berikut adalah urutan teknik yang dilakukan : 
+1.  **Encoding Data Kategorikal** : Seluruh fitur dalam dataset bersifta kategorikal. Untuk dapat digunakan dalam model machine learning, data kategorikal ini perlu dikonversi ke bentuk numerik. Teknik yang digunakan adalah **Label Encoding**, karena nilai-nilai kategori pada setipa fitur memiliki urutan atau jumlah kategori yang relatif sedikit dan dataset ini sudah cukup bersih. Proses ini dilakukan untuk semua kolom termasuk label (target)
+2.  **Membagi Data ke Data Latih dan Data Uji** : Setelah data dikodekan, data kemudian dibagi menjadi **data latih (train)** dan **data uji (test)** menggunakan proporsi 70:30. Pembagian ini bertujuan untuk menguji performa model pada data yang belum pernah dilihat sebelumnya, sehingga hasil evaluasi lebih objektif
+3.  **SMOTE Oversampling** : Distribusi kelas target `class` diketahui tidak seimbang, dengan kelas `unacc` yang jauh lebih dominan dibanding `good` dan `vgood`. Untuk mengatasi hal ini, diterapkan teknik **SMOTE (Synthetic Minority Oversampling Technique** dari library `imblearn`. SMOTE hanya diterapkan pada **data latih**, untuk menghindari kebocoran data uji. Hasilnya, jumlah data di setiap kelas menjadi seimbang.
 
 ## Modelling
 Proses pemodelan dilakukan melalui beberapa langkah sebagai berikut : 
