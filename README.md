@@ -109,6 +109,8 @@ Berikut adalah ringkasan metrik masing-masing model :
 | Recall    | 90%–92%        | **95%–97%**     |
 | F1-Score  | 90%–92%        | **95%–97%**     |
 
-Jika dikaitkan dengan konteks data dan **problem statement**, yaitu mengklasifikasikan jenis evaluasi kendaraan berdasarkan atribut seperti harga, keamanan, dan kapasitas -- maka penggunaan model dengan akurasi dan stabilitas tinggi sangat penting agar hasil klasifikasi benar-benar bisa digunakan dalam proses pengambilan keputusan, misalnya dalam menyusun segmentasi pasar, menentukan kelayakan kendaraan untuk kelompok pengguna tertentu, atau dalam sistem rekomendasi kendaraan otomatis
+Permasalahan utama dalam proyek ini adalah **mengklasifikasikan jenis kendaraan** berdasarkan atribut-atribut seperti **harga**, **kapasitas**, dan **tingkat keamanan**, yang seluruhnya bersifat kategorikal. Keluaran dari sistem ini diharapkan dapat mendukung **pengambilan keputusan**, baik dalam **sistem rekomendasi kendaraan**, **penyusunan segmentasi pasar**, maupun **penentuan kelayakan kendaraan** untuk kebutuhan pengguna tertentu.
 
-Dengan performa yang lebih akurat, **Random Forest dipilih sebagai model terbaik** dalam proyek ini. Model ini mampu memberikan hasil prediksi yang konsisten dan dapat diandalkan dalam berbagai kelas, yang sangat penting dalam konteks klasifikasi kendaraan dengan berbagai kategori target. Akurasi dan presisi yang tinggi akan berdampak langsung pada efisiensi sistem dan kepuasan pengguna di sisi aplikasi nyata dari proyek ini.
+Dari hasil evaluasi yang diperoleh : 
+-  Model **Random Forest** terbukti mampu memberikan prediksi yang **konsisten**, **stabil**, dan **akurasi tinggi**, yang sesuai dengan **kebutuhan solusi** yang telah dirumuskan pada tahap Business Understanding.
+-  Performanya mendukung **implementasi nyata** model dalam lingkungan produksi, misalnya pada sistem rekomendasi kendaraan otomatis yang membutuhkan presisi dan akurasi tinggi agar dapat dipercaya oleh pengguna akhir.
