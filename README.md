@@ -66,10 +66,9 @@ Pada tahap ini, dua model machine learning digunakan untuk menyelesaikan permasa
 1.  **Decision Tree Classifier**
 2.  **Random Forest Classifier**
 
-Kedua model dipilih karena : 
--  Mampu menangani data kategorikal (setelah encoding)
--  Interpretatif dan cocok untuk data dengan fitur non-numerik
--  Tidak membutuhkan normalisasi atau scaling data
+Kedua model dipilih karena memiliki karakteristik yang cocok untuk jenis data pada proyek ini, yaitu data dengan fitur kategorikal yang telah diencoding, dan tidak memerlukan normalisasi atau scaling data. Selain itu :
+-  **Decision Tree** adalah model yang bersifat interpretable, cocok untuk memahami pola keputusan karena visualisasi pohon dapat memberikan wawasan logis
+-  **Random Forest** adalah model _ensemble_ yang membangun banyak pohon keputusan dan menggabungkan hasil prediksinya dengan metode voting, sehingga memberikan prediksi yang lebih stabil dan akurat.
 
 Proses pemodelan dilakukan sebagai berikut : 
 -  Melatih model pada data latih hasil SMOTE (`X-train_bal`, `y_train_bal`)
@@ -77,8 +76,14 @@ Proses pemodelan dilakukan sebagai berikut :
 -  Mengevaluasi performa menggunakan metrik **akurasi**, **precision**, **recall**, dan **F1-Score**
 
 Berikut adalah parameter awal yang digunakan :
--  Decision Tree : `criterion='gini'`, `max_depth=None`, `random_state=42`
--  Random Forest : `n_estimators=100`, `max_depth=None`, `random_state=42`
+| Model             | Parameter          | Alasan Pemilihan                                                                                         |
+|-------------------|--------------------|-----------------------------------------------------------------------------------------------------------|
+| **Decision Tree** | `criterion='gini'` | Digunakan untuk mengukur kualitas split dengan metode pengukuran ketidakmurnian (*impurity*) yang umum. |
+|                   | `max_depth=None`   | Tidak membatasi kedalaman pohon untuk menghindari kehilangan informasi awal (nilai default).             |
+|                   | `random_state=42`  | Menjaga konsistensi hasil antar percobaan.                                                               |
+| **Random Forest** | `n_estimators=100` | Jumlah 100 pohon dipilih sebagai nilai default yang sering memberikan hasil stabil tanpa overfitting.    |
+|                   | `max_depth=None`   | Tidak dibatasi untuk awal eksperimen, memungkinkan setiap pohon tumbuh maksimal.                         |
+|                   | `random_state=42`  | Untuk reprodusibilitas hasil.                                                                            |
 
 Kelebihan dan Kekurangan dari masing-masing model :
 | Model             | Kelebihan                                                                                      | Kekurangan                                                                           |
@@ -104,4 +109,6 @@ Berikut adalah ringkasan metrik masing-masing model :
 | Recall    | 90%–92%        | **95%–97%**     |
 | F1-Score  | 90%–92%        | **95%–97%**     |
 
-Pemilihan model didasarkan pada hasil evaluasi ini, yang menunjukkan bahwa **Random Forest** lebih efektif dalam menyelesaikan tugas klasifikasi jenis kendaraan dengan fitur-fitur kategorikal.
+Jika dikaitkan dengan konteks data dan **problem statement**, yaitu mengklasifikasikan jenis evaluasi kendaraan berdasarkan atribut seperti harga, keamanan, dan kapasitas -- maka penggunaan model dengan akurasi dan stabilitas tinggi sangat penting agar hasil klasifikasi benar-benar bisa digunakan dalam proses pengambilan keputusan, misalnya dalam menyusun segmentasi pasar, menentukan kelayakan kendaraan untuk kelompok pengguna tertentu, atau dalam sistem rekomendasi kendaraan otomatis
+
+Dengan performa yang lebih akurat, **Random Forest dipilih sebagai model terbaik** dalam proyek ini. Model ini mampu memberikan hasil prediksi yang konsisten dan dapat diandalkan dalam berbagai kelas, yang sangat penting dalam konteks klasifikasi kendaraan dengan berbagai kategori target. Akurasi dan presisi yang tinggi akan berdampak langsung pada efisiensi sistem dan kepuasan pengguna di sisi aplikasi nyata dari proyek ini.
