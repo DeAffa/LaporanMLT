@@ -99,15 +99,33 @@ Setelah dilakukan pelatihan dan evaluasi pada kedua model, didapatkan bahwa :
 Pada tahap evaluasi ini, digunakan beberapa metrik yang umum digunakan dalam permasalahan klasifikasi multikelas, yaitu **accuracy**, **precision**, **recall**, dan **F1-Score**. Metrik **accuracy** mengukur seberapa banyak prediksi yang benar dari seluruh data uji. Namun, karena klasifikasi ini melibatkan banyak kelas, maka penting juga untuk melihat **precision**, yaitu seberapa tepat model dalam memprediksi suatu kelas, dan **recall** yaitu seberapa baik model dalam mengenali semua data yang benar-benar termasuk dalam kelas tersebut.
 Kedua metrik tersebut dilengkapi dengan **F1-Score**, yang merupakan rata-rata harmonis dari precision dan recall, serta sangat bermanfaat ketika terdapat kemungkinan ketidakseimbangan antarkelas.
 
-Hasil Evaluasi menunjukkan bahwa model **Random Forest** memiliki kinerja yang lebih baik dibandingkan **Decision Tree** pada semua metrik yang digunakan. Model Decision Tree memiliki tingkat akurasi sekitar 92%, dengan precision, recall, dan F2-Score rata-rata pada kisaran 90 hingga 92% untuk setiap kelas. Sementara itu, Random Forest mencatatkan akurasi sekitar 96%, dengan precision, recal, dan F1-Score di kisaran 95 hingga 97%. Dengan performa yang lebih stabil dan akurat, Random Forest dipilih sebagai model terbaik dalam proyek ini.
+Hasil Evaluasi menunjukkan bahwa model **Random Forest** memiliki kinerja yang lebih baik dibandingkan **Decision Tree** pada semua metrik yang digunakan. Model Decision Tree memiliki tingkat akurasi sekitar 92%, dengan precision, recall, dan F1-Score rata-rata pada kisaran 90 hingga 92% untuk setiap kelas. Sementara itu, Random Forest mencatatkan akurasi sekitar 96%, dengan precision, recal, dan F1-Score di kisaran 95 hingga 97%. Dengan performa yang lebih stabil dan akurat, Random Forest dipilih sebagai model terbaik dalam proyek ini.
+
+Berikut adalah rangkuman tabel evaluasi per-kelas :
+| **Model**        | **Class** | **Precision** | **Recall** | **F1-Score** | **Support** |
+|------------------|-----------|---------------|------------|--------------|-------------|
+| Decision Tree    | 0         | 0.85          | 0.84       | 0.85         | 115         |
+| Decision Tree    | 1         | 0.94          | 0.76       | 0.84         | 21          |
+| Decision Tree    | 2         | 0.95          | 0.97       | 0.96         | 363         |
+| Decision Tree    | 3         | 1.00          | 0.90       | 0.95         | 20          |
+| Random Forest    | 0         | 0.90          | 0.96       | 0.93         | 115         |
+| Random Forest    | 1         | 0.94          | 0.76       | 0.84         | 21          |
+| Random Forest    | 2         | 0.99          | 0.98       | 0.99         | 363         |
+| Random Forest    | 3         | 1.00          | 0.95       | 0.97         | 20          |
 
 Berikut adalah ringkasan metrik masing-masing model : 
-| Metrik    | Decision Tree | Random Forest |
-|----------|----------------|----------------|
-| Accuracy  | ~92%           | **~96%**        |
-| Precision | 91%–93%        | **95%–97%**     |
-| Recall    | 90%–92%        | **95%–97%**     |
-| F1-Score  | 90%–92%        | **95%–97%**     |
+| **Metrik**                  | **Decision Tree** | **Random Forest** |
+|----------------------------|-------------------|-------------------|
+| Accuracy                   | 0.92              | 0.96              |
+| Precision (Macro)          | 0.915             | 0.963             |
+| Recall (Macro)             | 0.913             | 0.960             |
+| F1-Score (Macro)           | 0.913             | 0.961             |
+| Precision (Weighted)       | 0.921             | 0.965             |
+| Recall (Weighted)          | 0.920             | 0.961             |
+| F1-Score (Weighted)        | 0.920             | 0.962             |
+####  Catatan :
+-  Macro average menghitung rata-rata metrik dari semua kelas secara setara, tanpa mempertimbangkan proporsi jumlah data tiap kelas
+-  Weighted average mempertimbangkan proporsi jumlah data dari setiap kelas dalam perhitungan rata-rata
 
 Permasalahan utama dalam proyek ini adalah **mengklasifikasikan jenis kendaraan** berdasarkan atribut-atribut seperti **harga**, **kapasitas**, dan **tingkat keamanan**, yang seluruhnya bersifat kategorikal. Keluaran dari sistem ini diharapkan dapat mendukung **pengambilan keputusan**, baik dalam **sistem rekomendasi kendaraan**, **penyusunan segmentasi pasar**, maupun **penentuan kelayakan kendaraan** untuk kebutuhan pengguna tertentu.
 
